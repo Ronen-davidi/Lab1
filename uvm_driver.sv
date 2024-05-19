@@ -19,18 +19,10 @@
         forever begin
             seq_item_port.get_next_item(req);
             `uvm_info(get_type_name(), {"req item \n", req.sprint}, UVM_HIGH)
-            fork begin
                 @(posedge dut_vi.clk);
                 dut_vi.a <= req.A;
                 dut_vi.b <= req.B;
                 dut_vi.enable <= req.enable;
-            end
-            begin
-                @(posedge dut_vi.clk);
-                wait(dut_vi.enable == 1);
-                dut_vi.sum = req.Sum;
-            end
-            join_any   
             seq_item_port.item_done(req);
         end
     endtask
